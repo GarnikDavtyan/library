@@ -25,7 +25,10 @@
 
     <div class="col-md-6">
         <div class="d-flex justify-content-end align-items-center">
-            <button id="logout">Logout</button>
+            <form method="POST" action="/logout">
+                @csrf
+                <button type="submit" id="logout">Logout</button>
+            </form>
         </div>
     </div>
 

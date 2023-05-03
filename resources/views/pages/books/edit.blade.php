@@ -4,7 +4,7 @@
 
 @section('header', 'Edit The Book')
 
-<form id="books-edit" enctype="multipart/form-data">
+<form id="books-edit">
 @method('PUT')
     <div class="d-flex flex-column">
         <label for="title">Title:</label>

@@ -40,9 +40,6 @@ $('#login-form').on('submit', function (e) {
   e.preventDefault();
   (0,_requests_js__WEBPACK_IMPORTED_MODULE_0__.request)('/api/login', 'POST', $(this));
 });
-$('#logout').on('click', function (e) {
-  (0,_requests_js__WEBPACK_IMPORTED_MODULE_0__.request)('/api/logout', 'POST');
-});
 
 /***/ }),
 

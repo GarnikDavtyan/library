@@ -19,11 +19,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['guest'])->group(function () {
     Route::controller(AuthController::class)->group(function () {
-        Route::post('/register', 'register');
         Route::post('/login', 'login');
+        Route::post('/register', 'register');
+        
     });
 });
-Route::post('logout', [AuthController::class, 'logout']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -34,13 +34,15 @@ Route::middleware('auth:sanctum')->group(function () {
         
         Route::apiResource('categories', CategoryController::class);
         Route::apiResource('staff', StaffController::class);
+
+        Route::post('books/excel', [BookController::class, 'excel']);
     });
 
     Route::post('books/{book}/comment', [BookController::class, 'comment'])->middleware('visitor');
 
-    Route::post('books/excel', [BookController::class, 'excel']);
-
     Route::apiResource('books', BookController::class)->only([
         'index', 'show'
     ]);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });

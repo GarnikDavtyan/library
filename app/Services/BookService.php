@@ -57,7 +57,7 @@ class BookService {
 
             $book = Book::create($data);
 
-            return $book;
+            return $book->load('category');
         } catch (Exception $e) {
             Storage::delete($coverPath);
 
@@ -88,7 +88,7 @@ class BookService {
                 Storage::delete($oldCover);
             }
             
-            return $book;
+            return $book->load('category');
         } catch (Exception $e) {
             Storage::delete($coverPath);
 

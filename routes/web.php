@@ -3,7 +3,9 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StaffController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,4 +43,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['guest'])->group(function () {
     Route::view('/register', 'auth.register')->name('register');
     Route::view('/login', 'auth.login')->name('login');
+});
+
+Route::post('/logout', function() {
+    Session::flush();
+
+    Auth::logout();
+
+    return redirect('/');
 });

@@ -11,7 +11,3 @@ $('#login-form').on('submit', function(e) {
 
     request('/api/login', 'POST', $(this));
 });
-
-$('#logout').on('click', function(e) {
-    request('/api/logout', 'POST');
-});
