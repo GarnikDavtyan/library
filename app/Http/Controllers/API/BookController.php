@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
+use App\Http\Requests\ExcelRequest;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
@@ -91,8 +92,16 @@ class BookController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse();
         }
-        
+    }
 
-        
+    public function excel(ExcelRequest $request)
+    {
+        try {
+            $this->bookService->excel($request);
+
+            return $this->successResponse(null, 'You will recieve email notification about the status');
+        } catch (Exception $e) {
+            return $this->errorResponse();
+        }
     }
 }

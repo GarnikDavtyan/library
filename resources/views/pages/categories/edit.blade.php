@@ -9,7 +9,7 @@
     <input type="text" id="title" name="title" value="{{$category->title}}" required>
     <div id="title-error" class="field-error alert alert-danger d-none"></div>
 
-    <input type="hidden" id="category-id" value="{{$category->slug}}">
+    <input type="hidden" id="category-id" class="edit-slug" value="{{$category->slug}}">
     
     <button type="submit">Save</button>
 </form>

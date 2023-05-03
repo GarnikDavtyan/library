@@ -1,4 +1,4 @@
-export function request(route, method, form = {}, isCreateOrUpdate = false, withImage = false) {
+export function request(route, method, form = {}, withResponse = false, withFile = false, isEdit = false) {
 
     $('.success-response').addClass('d-none');
     $('.error-response').addClass('d-none');
@@ -24,7 +24,7 @@ export function request(route, method, form = {}, isCreateOrUpdate = false, with
     }
     
     if (Object.keys(form).length !== 0) {
-        if(withImage) {
+        if(withFile) {
             ajaxOptions.data = new FormData(form[0]);
             ajaxOptions.contentType = false;
             ajaxOptions.processData = false;
@@ -33,8 +33,16 @@ export function request(route, method, form = {}, isCreateOrUpdate = false, with
         }
     }
 
-    if(isCreateOrUpdate) {
+    if(withResponse) {
         ajaxOptions.success = function(response) {
+            if(isEdit) {
+                let currentUrl = window.location.href;
+                let currentSlug = currentUrl.split('/')[4];
+                let newUrl = currentUrl.replace(currentSlug, response.data.slug);
+                history.replaceState({}, '', newUrl);
+
+                $('.edit-slug').val(response.data.slug);
+            }
             $('.success-response').text(response.message);
             $('.success-response').removeClass('d-none');
         }

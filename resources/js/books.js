@@ -11,7 +11,7 @@ $('#books-edit').on('submit', function(e) {
 
     let id = $('#book-id').val();
 
-    request('/api/books/' + id, 'POST', $(this), true, true);
+    request('/api/books/' + id, 'POST', $(this), true, true, true);
 });
 
 $('body').on('click', '#books-delete', function(e) {
@@ -27,4 +27,10 @@ $('#comment').on('submit', function(e) {
     let id = $('#book-comment-id').val();
 
     request('/api/books/' + id + '/comment', 'POST', $(this));
+});
+
+$('#books-excel').on('submit', function(e) {
+    e.preventDefault();
+
+    request('/api/books/excel', 'POST', $(this), true, true);
 });

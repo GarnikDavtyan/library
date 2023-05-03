@@ -23,11 +23,11 @@
         <div id="author-error" class="field-error alert alert-danger d-none"></div>
 
         <label for="description">Description:</label>
-        <input type="text" id="description" name="description" required>
+        <input type="text" id="description" name="description">
         <div id="description-error" class="field-error alert alert-danger d-none"></div>
 
         <label for="cover">Cover</label>
-        <input id="cover" type="file" name="cover" accept="image/png, image/gif, image/jpeg" required>
+        <input id="cover" type="file" name="cover" accept="image/png, image/gif, image/jpeg">
         <div id="cover-error" class="field-error alert alert-danger d-none"></div>
 
         <button type="submit">Save</button>

@@ -11,7 +11,7 @@ $('#categories-edit').on('submit', function(e) {
     
     let id = $('#category-id').val();
 
-    request('/api/categories/' + id, 'PUT', $(this), true);
+    request('/api/categories/' + id, 'PUT', $(this), true, false, true);
 });
 
 $('body').on('click', '#categories-delete', function(e) {

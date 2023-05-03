@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Str;
 
 class CategoryService {
     public function list(): Collection
@@ -19,35 +18,18 @@ class CategoryService {
 
     public function store(StoreCategoryRequest $request): Category
     {
-        $category = new Category();
-
-        $category->title = $request->title;
-        
-        // generate a unique slug
-        $slug = Str::slug($request->title);
-        while(Category::where('slug', $slug)->first()) {
-            $slug .= '-'. strtolower(Str::random(3));
-        }
-        $category->slug = $slug;
-
-        $category->save();
+        $category = Category::create([
+            'title' => $request->title
+        ]);
 
         return $category;
     }
     
     public function update(UpdateCategoryRequest $request, Category $category): Category
     {
-        $category->title = $request->title;
-
-        $slug = Str::slug($request->title);
-
-        // generate a unique slug
-        while(Category::where('id', '<>', $category->id)->where('slug', $slug)->first()) {
-            $slug .= '-'. strtolower(Str::random(3));
-        }
-        $category->slug = $slug;
-
-        $category->save();
+        $category->update([
+            'title' => $request->title
+        ]);
             
         return $category;
     }
@@ -58,6 +40,7 @@ class CategoryService {
             $category->delete();
         }
         catch(QueryException $e) {
+            // foreign key constraint violation
             if ($e->errorInfo[1] === 1451) {
                 throw $e;
             }

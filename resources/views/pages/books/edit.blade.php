@@ -24,16 +24,15 @@
         <div id="author-error" class="field-error alert alert-danger d-none"></div>
 
         <label for="description">Description:</label>
-        <input type="text" id="description" name="description" value="{{$book->description}}" required>
+        <input type="text" id="description" name="description" value="{{$book->description}}">
         <div id="description-error" class="field-error alert alert-danger d-none"></div>
 
         <label for="cover">Cover</label>
-        <img src="{{asset($book->cover)}}" alt="{{$book->title}}" width="300">
+        <img src="{{$book->cover ? asset($book->cover) : asset('/storage/covers/default.png')}}" alt="{{$book->title}}" width="300">
         <input id="cover" type="file" name="cover" accept="image/png, image/gif, image/jpeg">
         <div id="cover-error" class="field-error alert alert-danger d-none"></div>
 
-
-        <input type="hidden" id="book-id" value="{{$book->slug}}">
+        <input type="hidden" id="book-id" class="edit-slug" value="{{$book->slug}}">
 
         <button type="submit">Save</button>
     </div>

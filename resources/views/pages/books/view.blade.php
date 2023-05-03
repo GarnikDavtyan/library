@@ -6,7 +6,7 @@
 
 <div>
     <div>
-        <img src="{{asset($book->cover)}}" alt="{{ $book->title }}" width="300">
+        <img src="{{$book->cover ? asset($book->cover) : asset('/storage/covers/default.png')}}" alt="{{ $book->title }}" width="300">
     </div>
     <div>
         <p><strong>Category:</strong> {{ $book->category->title }}</p>

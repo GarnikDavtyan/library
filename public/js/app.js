@@ -63,7 +63,7 @@ $('#books-create').on('submit', function (e) {
 $('#books-edit').on('submit', function (e) {
   e.preventDefault();
   var id = $('#book-id').val();
-  (0,_requests_js__WEBPACK_IMPORTED_MODULE_0__.request)('/api/books/' + id, 'POST', $(this), true, true);
+  (0,_requests_js__WEBPACK_IMPORTED_MODULE_0__.request)('/api/books/' + id, 'POST', $(this), true, true, true);
 });
 $('body').on('click', '#books-delete', function (e) {
   e.preventDefault();
@@ -74,6 +74,10 @@ $('#comment').on('submit', function (e) {
   e.preventDefault();
   var id = $('#book-comment-id').val();
   (0,_requests_js__WEBPACK_IMPORTED_MODULE_0__.request)('/api/books/' + id + '/comment', 'POST', $(this));
+});
+$('#books-excel').on('submit', function (e) {
+  e.preventDefault();
+  (0,_requests_js__WEBPACK_IMPORTED_MODULE_0__.request)('/api/books/excel', 'POST', $(this), true, true);
 });
 
 /***/ }),
@@ -144,7 +148,7 @@ $('#categories-create').on('submit', function (e) {
 $('#categories-edit').on('submit', function (e) {
   e.preventDefault();
   var id = $('#category-id').val();
-  (0,_requests_js__WEBPACK_IMPORTED_MODULE_0__.request)('/api/categories/' + id, 'PUT', $(this), true);
+  (0,_requests_js__WEBPACK_IMPORTED_MODULE_0__.request)('/api/categories/' + id, 'PUT', $(this), true, false, true);
 });
 $('body').on('click', '#categories-delete', function (e) {
   e.preventDefault();
@@ -167,8 +171,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 function request(route, method) {
   var form = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  var isCreateOrUpdate = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-  var withImage = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  var withResponse = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  var withFile = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+  var isEdit = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
   $('.success-response').addClass('d-none');
   $('.error-response').addClass('d-none');
   $('.field-error').addClass('d-none');
@@ -191,7 +196,7 @@ function request(route, method) {
     }
   };
   if (Object.keys(form).length !== 0) {
-    if (withImage) {
+    if (withFile) {
       ajaxOptions.data = new FormData(form[0]);
       ajaxOptions.contentType = false;
       ajaxOptions.processData = false;
@@ -199,8 +204,15 @@ function request(route, method) {
       ajaxOptions.data = form.serialize();
     }
   }
-  if (isCreateOrUpdate) {
+  if (withResponse) {
     ajaxOptions.success = function (response) {
+      if (isEdit) {
+        var currentUrl = window.location.href;
+        var currentSlug = currentUrl.split('/')[4];
+        var newUrl = currentUrl.replace(currentSlug, response.data.slug);
+        history.replaceState({}, '', newUrl);
+        $('.edit-slug').val(response.data.slug);
+      }
       $('.success-response').text(response.message);
       $('.success-response').removeClass('d-none');
     };

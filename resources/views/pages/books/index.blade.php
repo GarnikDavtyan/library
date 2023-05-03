@@ -7,18 +7,36 @@
 @if(Auth::user()->isStaff())
 <a href="/books/create">Add a book</a>
 @endif
+<div class="row">
+    <div class="col-md-6">
+        Filter by category: 
+        <form action="/books" method="GET">
+            <select name="category_filter">
+                <option value="" selected>none</option>
+                @foreach($categories as $category)
+                    <option value="{{$category->slug}}" {{ $category->slug === $selectedCategory ? 'selected' : '' }}>{{$category->title}}</option>
+                @endforeach
+            </select>
+            <button type="submit">Filter</button>
+        </form>
+    </div>
 
-<div>
-Filter by category: 
-<form action="/books" method="GET">
-    <select name="category_filter">
-        <option value="" selected>none</option>
-        @foreach($categories as $category)
-            <option value="{{$category->slug}}" {{ $category->slug === $selectedCategory ? 'selected' : '' }}>{{$category->title}}</option>
-        @endforeach
-    </select>
-    <button type="submit">Filter</button>
-</form>
+    @if(Auth::user()->isStaff())
+        <div class="col-md-6">
+            <div class="float-end">
+                Import from excel
+                <form id="books-excel">
+                    <input id="excel" type="file" name="excel" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
+        </div>
+    @endif
+</div>
+<div class="success-response alert alert-success d-none"></div>
+<div class="error-response alert alert-danger d-none"></div>
+<div id="excel-error" class="field-error alert alert-danger d-none"></div>
+
 </div>
 <table class="table table-striped table-bordered">
     <thead>
@@ -35,7 +53,7 @@ Filter by category:
     <tbody>
         @foreach($books as $book)
         <tr>
-            <td><img src="{{asset($book->cover)}}" width=100></td>
+            <td><img src="{{$book->cover ? asset($book->cover) : asset('/storage/covers/default.png')}}" width=100 alt="{{ $book->title }}"></td>
             <td>{{$book->title}}</td>
             <td>{{$book->category->title}}</td>
             <td>{{$book->author}}</td>

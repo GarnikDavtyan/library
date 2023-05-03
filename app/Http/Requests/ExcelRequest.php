@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBookRequest extends FormRequest
+class ExcelRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,11 +14,7 @@ class StoreBookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'category_id' => 'required|integer|exists:categories,id',
-            'author' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-            'cover' => 'image|mimes:jpeg,png,gif|max:2048',
+            'excel' => 'required|file|mimes:xls,xlsx|mimetypes:application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ];
     }
 }

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->foreignId('category_id')->constrained();
             $table->string('author');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->float('rating')->default(0);
-            $table->string('cover');
+            $table->string('cover')->nullable();
             $table->timestamps();
         });
     }

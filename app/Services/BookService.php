@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Http\Requests\CommentRequest;
+use App\Http\Requests\ExcelRequest;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+use App\Imports\BooksImport;
+use App\Jobs\NotifyUserOfCompletedImport;
 use App\Models\Book;
 use App\Models\Comment;
 use Exception;
@@ -15,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookService {
     public function list(Request $request): LengthAwarePaginator
@@ -45,18 +49,11 @@ class BookService {
     {
         try {
             $data = $request->all();
-
-            $coverPath = Storage::putFile('covers', $request->file('cover'));
-
-            $slug = Str::slug($request->title);
-
-            // generate a unique slug
-            while(Book::where('slug', $slug)->first()) {
-                $slug .= '-'. strtolower(Str::random(3));
+            
+            if ($request->hasFile('cover')) {
+                $coverPath = Storage::putFile('covers', $request->file('cover'));
+                $data['cover'] = 'storage/' . $coverPath;
             }
-
-            $data['slug'] = $slug;
-            $data['cover'] = 'storage/' . $coverPath;
 
             $book = Book::create($data);
 
@@ -75,21 +72,15 @@ class BookService {
 
             $oldCover = '';
             $coverPath = '';
-            if ($request->hasFile('cover')) {
-                $oldCover = Str::after($book->cover, 'storage');
+            if($request->hasFile('cover')) {
+                if($book->cover) {
+                    $oldCover = Str::after($book->cover, 'storage');
+                }
 
                 $coverPath = Storage::putFile('covers', $request->file('cover'));
                 
                 $data['cover'] = 'storage/' . $coverPath;
             }
-
-            $slug = Str::slug($request->title);
-            
-            // generate a unique slug
-            while(Book::where('id', '<>', $book->id)->where('slug', $slug)->first()) {
-                $slug .= '-'. strtolower(Str::random(3));
-            }
-            $data['slug'] = $slug;
 
             $book->update($data);
 
@@ -136,5 +127,13 @@ class BookService {
         $comment->save();
 
         return $comment;
+    }
+
+    public function excel(ExcelRequest $request) 
+    {
+        $file = $request->file('excel');
+
+        Excel::queueImport(new BooksImport(Auth::user()), $file)
+            ->chain([new NotifyUserOfCompletedImport(Auth::user())]);
     }
 }
