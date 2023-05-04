@@ -22,20 +22,14 @@ class BookSeeder extends Seeder
 
         for ($i = 0; $i < 50; $i++) {
             $title = $faker->sentence(3);
-            $slug = Str::slug($title);
-            
-            while(Book::where('slug', $slug)->first()) {
-                $slug .= '-'. strtolower(Str::random(3));
-            }
 
             $imageUrl = 'https://via.placeholder.com/300x300.png?text=' . urlencode($title);
             $imageContent = file_get_contents($imageUrl);
-            $imagePath = 'covers/' . $slug . '.png';
+            $imagePath = 'covers/' . Str::random(40) . '.png';
             Storage::put($imagePath, $imageContent);
 
             Book::create([
                 'title' => $title,
-                'slug' => $slug,
                 'category_id' => $faker->randomElement($categories),
                 'author' => $faker->name(),
                 'description' => $faker->paragraph(3),

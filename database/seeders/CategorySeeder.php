@@ -6,7 +6,6 @@ use App\Models\Category;
 use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
 {
@@ -18,16 +17,13 @@ class CategorySeeder extends Seeder
         $faker = Factory::create();
 
         for ($i = 0; $i < 20; $i++) {
-            $title = $faker->sentence(3);
-            $slug = Str::slug($title);
-            
-            while(Category::where('slug', $slug)->first()) {
-                $slug .= '-'. strtolower(Str::random(3));
+            do {
+                $title = $faker->sentence(3);
             }
+            while(Category::where('title', $title)->exists());
 
             Category::create([
-                'title' => $title,
-                'slug' => $slug
+                'title' => $title
             ]);
         }
     }
