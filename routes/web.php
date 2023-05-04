@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Session;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::redirect('/', '/books');
     
     Route::middleware(['staff'])->group(function () {
@@ -38,6 +38,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('books', BookController::class)->only([
         'index', 'show'
     ]);
+
+    Route::post('/logout', function() {
+        Session::flush();
+    
+        Auth::logout();
+    
+        return redirect('/');
+    });
 });
 
 Route::middleware(['guest'])->group(function () {
@@ -45,10 +53,3 @@ Route::middleware(['guest'])->group(function () {
     Route::view('/login', 'auth.login')->name('login');
 });
 
-Route::post('/logout', function() {
-    Session::flush();
-
-    Auth::logout();
-
-    return redirect('/');
-});
