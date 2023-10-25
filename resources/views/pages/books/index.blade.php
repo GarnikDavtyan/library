@@ -1,43 +1,42 @@
-@extends('layouts.pages')
+@extends('layouts.app')
 
-@section('pages_content')
+@section('content')
 
 @section('header', 'Books')
 
 @if(Auth::user()->isStaff())
-<a href="/books/create">Add a book</a>
-@endif
-<div class="row">
-    <div class="col-md-6">
-        Filter by category: 
-        <form action="/books" method="GET">
-            <select name="category_filter">
-                <option value="" selected>none</option>
-                @foreach($categories as $category)
-                    <option value="{{$category->slug}}" {{ $category->slug === $selectedCategory ? 'selected' : '' }}>{{$category->title}}</option>
-                @endforeach
-            </select>
-            <button type="submit">Filter</button>
-        </form>
-    </div>
-
-    @if(Auth::user()->isStaff())
+    <div class="row">
         <div class="col-md-6">
-            <div class="float-end">
-                Import from excel
-                <form id="books-excel">
-                    <input id="excel" type="file" name="excel" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
-                    <button type="submit">Upload</button>
-                </form>
-            </div>
+            <a href="/books/create">Add a book</a>
         </div>
-    @endif
+        <div class="col-md-6">
+            <form id="books-excel">
+                <label for="excel" class="form-label">Import from excel</label>
+                <input class="form-control" id="excel" type="file" name="excel" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
+                <button type="submit" class="btn btn-warning mt-1">Upload</button>
+            </form>
+        </div>
+    </div>
+    <div class="success-response alert alert-success d-none mt-1"></div>
+    <div class="error-response alert alert-danger d-none mt-1"></div>
+    <div id="excel-error" class="field-error alert alert-danger d-none mt-1"></div>
+    <hr>
+@endif
+<div class="d-flex align-items-center mb-1">
+    <div class="me-1">
+        Filter by category: 
+    </div>
+    <form action="/books" method="GET" class="d-flex align-items-center">
+        <select name="category_filter" class="form-select me-1">
+            <option value="" selected>none</option>
+            @foreach($categories as $category)
+                <option value="{{$category->slug}}" {{ $category->slug === $selectedCategory ? 'selected' : '' }}>{{$category->title}}</option>
+            @endforeach
+        </select>
+        <button type="submit" class="btn btn-info">Filter</button>
+    </form>
 </div>
-<div class="success-response alert alert-success d-none"></div>
-<div class="error-response alert alert-danger d-none"></div>
-<div id="excel-error" class="field-error alert alert-danger d-none"></div>
 
-</div>
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
@@ -63,7 +62,7 @@
                 <a href="/books/{{$book->slug}}">View</a>
                 @if(Auth::user()->isStaff()) 
                     <a href="/books/{{$book->slug}}/edit">Edit</a>
-                    <button id="books-delete" attr-id="{{$book->slug}}">Delete</button>
+                    <button id="books-delete" class="btn btn-danger mt-1" attr-id="{{$book->slug}}">Delete</button>
                 @endif
             </td>
         </tr>

@@ -1,6 +1,6 @@
-@extends('layouts.pages')
+@extends('layouts.app')
 
-@section('pages_content')
+@section('content')
 
 @section('header', $book->title)
 
@@ -22,10 +22,10 @@
     @endif
     @if(Auth::user()->isVisitor())
         <form id="comment">
-            <input type="text" name="comment" required>
+            <input type="text" class="form-control" name="comment" required>
             <input type="hidden" id="book-comment-id" value="{{$book->slug}}">
 
-            <button type="submit">Add comment</button>
+            <button type="submit" class="btn btn-primary mt-1">Add comment</button>
         </form>
     @endif 
 </div>

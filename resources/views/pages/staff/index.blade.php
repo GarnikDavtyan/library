@@ -1,10 +1,11 @@
-@extends('layouts.pages')
+@extends('layouts.app')
 
-@section('pages_content')
+@section('content')
 
 @section('header', 'Staff')
 
 <a href="/staff/create">Add a staff member</a>
+<hr>
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
@@ -20,7 +21,7 @@
                 <td>{{$member->email}}</td>
                 <td>
                     <a href="/staff/{{$member->id}}/edit">Edit</a>
-                    <button id="staff-delete" attr-id="{{$member->id}}">Delete</button>
+                    <button id="staff-delete" class="btn btn-danger ms-1" attr-id="{{$member->id}}">Delete</button>
                 </td>
             </tr>
         @endforeach
